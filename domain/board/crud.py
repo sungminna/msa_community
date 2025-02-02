@@ -24,7 +24,7 @@ def create_board(db: Session, board_create: BoardCreate):
         db.rollback()  # 트랜잭션 롤백
         if "duplicate key" in str(e).lower():
             raise ValueError("Board name already exists")
-        raise
+        raise e
 
 def delete_board(db: Session, board_id: int):
     try:

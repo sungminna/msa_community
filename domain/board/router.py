@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -50,13 +50,13 @@ def board_create(_board_create: schema.BoardCreate, db: Session = Depends(get_db
             detail=str(e)
         )
     
-@router.delete("/{board_id}", response_model=schema.BoardResponse)
+@router.delete("/{board_id}", status_code=status.HTTP_204_NO_CONTENT)
 def board_delete(board_id: int, db: Session = Depends(get_db)):
     try:
         board = crud.delete_board(db=db, board_id=board_id)
         if not board:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                                 detail="board not found")
-        return board
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         raise e
