@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, func
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, func, UniqueConstraint
 
 from database import Base
 
@@ -32,3 +32,7 @@ class Like(Base):
     post_id = Column(Integer, ForeignKey("boards.id", ondelete="CASCADE"))
     user_id = Column(Integer)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        UniqueConstraint("post_id", "user_id", name="uix_post_user"),
+    )
